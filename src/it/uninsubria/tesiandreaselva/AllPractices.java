@@ -40,6 +40,19 @@ public class AllPractices extends Activity {
 	        	}
 	        }
 	    });
+		ViewServer.get(this).addWindow(this);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ViewServer.get(this).removeWindow(this);
+	}
+	
+	@Override
+    public void onResume() {
+		super.onResume();
+		ViewServer.get(this).setFocusedWindow(this);
 	}
 
 	@Override

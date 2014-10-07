@@ -11,6 +11,19 @@ public class BPLayoutHierarchy extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bplayout_hierarchy);
+		ViewServer.get(this).addWindow(this);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ViewServer.get(this).removeWindow(this);
+	}
+	
+	@Override
+    public void onResume() {
+		super.onResume();
+		ViewServer.get(this).setFocusedWindow(this);
 	}
 
 	@Override
