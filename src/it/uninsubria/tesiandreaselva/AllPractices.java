@@ -40,7 +40,7 @@ public class AllPractices extends Activity {
 	        	}
 	        }
 	    });
-		ViewServer.get(this).addWindow(this);
+		ViewServer.get(this).addWindow(this); 
 	}
 	
 	@Override
