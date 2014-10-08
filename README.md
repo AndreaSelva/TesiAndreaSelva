@@ -4,7 +4,7 @@ TesiAndreaSelva
 Progetto di Tesi. Andrea Selva matricola 714002 Uninversità Insubria di Varese.
 andrea.selva90@gmail.com
 
-Step 1)
+**Step 1)**
 
 -Creazione di una activity principale composta da GridView in cui saranno presenti
 due colonne: da una parte le Best Practices (BP) dall'altra le Not Best Practices (NBP). 
