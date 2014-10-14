@@ -13,7 +13,7 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 
 
-public class AllPractices extends Activity {
+public class AllPracticesActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +32,10 @@ public class AllPractices extends Activity {
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	        	if(position == 0){
-	        		Intent intent = new Intent(AllPractices.this, BPLayoutHierarchy.class);
+	        		Intent intent = new Intent(AllPracticesActivity.this, BPLayoutHierarchyActivity.class);
 	        		startActivity(intent);
 	        	}else if(position == 1){
-	        		Intent intent = new Intent(AllPractices.this, NBPLayoutHierarchy.class);
+	        		Intent intent = new Intent(AllPracticesActivity.this, NBPLayoutHierarchyActivity.class);
 	        		startActivity(intent);
 	        	}
 	        }

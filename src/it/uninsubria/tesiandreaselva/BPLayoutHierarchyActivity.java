@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class BPLayoutHierarchy extends Activity {
+public class BPLayoutHierarchyActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
