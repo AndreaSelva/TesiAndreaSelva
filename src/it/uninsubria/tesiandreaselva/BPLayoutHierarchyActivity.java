@@ -16,7 +16,7 @@ public class BPLayoutHierarchyActivity extends Activity {
 		
 		RelativeLayout rootLayout = new RelativeLayout(this); //creo relative
 		RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams
-				(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT); // params root
+				(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); // params root
 		rootLayout.setPadding(25, 25, 0, 0);
 		
 		
@@ -45,10 +45,11 @@ public class BPLayoutHierarchyActivity extends Activity {
         	lpViewBelow.addRule(RelativeLayout.BELOW, tv.getId());
         	
         }
-        
+        rootLayout.setBackgroundColor(0xFF66FF66);
         setContentView(rootLayout, relLayoutParam); //creo l intera vista
         //setContentView(R.layout.activity_bplayout_hierarchy);
 		
+        ViewServer.get(this).addWindow(this);
 	}
 	
 	@Override

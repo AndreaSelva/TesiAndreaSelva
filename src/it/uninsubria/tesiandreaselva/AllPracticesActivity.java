@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+
 
 
 public class AllPracticesActivity extends Activity {
@@ -23,11 +25,19 @@ public class AllPracticesActivity extends Activity {
 		String[] dati = new String[]{ 
 				"Layout Hierarchy Best Practices","Layout Hierarchy not Best Practices"
 		};
-		ListAdapter adapter = new ArrayAdapter<String>(
-				this,
-				android.R.layout.simple_list_item_1, 
-				dati
-			);
+		final int[] colors = new int[] { 0xFF66FF66, 0xFFFF4C4C };
+		ListAdapter adapter = new ArrayAdapter<String>(this, R.layout.grid_cell, dati) {
+			
+			  @Override
+			  public View getView(int position, View convertView, ViewGroup parent) {
+			    View view = super.getView(position, convertView, parent);
+			    int colorPos = position % colors.length;
+			    view.setBackgroundColor(colors[colorPos]);
+			    return view;
+			    
+			  }
+			};
+		
 		gridview.setAdapter(adapter);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -40,6 +50,10 @@ public class AllPracticesActivity extends Activity {
 	        	}
 	        }
 	    });
+		//View v = (View) gridview.getChildAt(0);
+		//v.setBackgroundColor(0x66FF66);
+		//v = (View) gridview.getChildAt(1);
+		//v.setBackgroundColor(Color.parseColor("#FF4C4C"));
 		ViewServer.get(this).addWindow(this); 
 	}
 	

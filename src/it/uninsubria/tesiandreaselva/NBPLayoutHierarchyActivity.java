@@ -42,7 +42,7 @@ public class NBPLayoutHierarchyActivity extends Activity {
 			fatherLayout=childLayout; //ora il child deve diventare father e si cicla
 			
         }
-		
+		rootLayout.setBackgroundColor(0xFFFF4C4C);
 		setContentView(rootLayout, linLayoutParam);
 		//setContentView(R.layout.activity_nbplayout_hierarchy);
 		
