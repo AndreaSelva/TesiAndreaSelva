@@ -13,50 +13,48 @@ public class NBPLayoutHierarchyActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//setContentView(R.layout.activity_nbplayout_hierarchy); 
-		
-		LinearLayout rootLayout = new LinearLayout(this); //layout root
+
+		LinearLayout rootLayout = new LinearLayout(this);
 		rootLayout.setOrientation(LinearLayout.VERTICAL);
-		LayoutParams linLayoutParam = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);  // params root
+		LayoutParams linLayoutParam = new LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
 		rootLayout.setPadding(25, 25, 0, 0);
-		
-		LayoutParams lpView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); //parametri textview
-        TextView tv = new TextView(this); //creo prima textview
-        tv.setText("Not Best Practices Layout Hierarchy");
-        
-        rootLayout.addView(tv, lpView); //inserisco la textview nella rootLinearLayout
-        
-        LinearLayout fatherLayout = rootLayout; //copio il root per usarlo in seguito nell'algoritmo
-        
-		for(int i=0; i<43; i++){ // MAX num di elementi 44 textview (stackoverflowerror)
-			
-			LinearLayout childLayout = new LinearLayout(this); //creo childLayout
+
+		LayoutParams lpView = new LayoutParams(
+				LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		TextView tv = new TextView(this);
+		tv.setText("Not Best Practices Layout Hierarchy");
+
+		rootLayout.addView(tv, lpView);
+		LinearLayout fatherLayout = rootLayout;
+
+		for (int i = 0; i < 43; i++) {
+
+			LinearLayout childLayout = new LinearLayout(this);
 			childLayout.setOrientation(LinearLayout.VERTICAL);
-			fatherLayout.addView(childLayout, linLayoutParam); //aggiungo childLayout al fatherLayout
-			
-			tv = new TextView(this); //creo nuovo text view
-		    tv.setText("Not Best Practices Layout Hierarchy");
-			childLayout.addView(tv, lpView);  //inserisco nuovo textview al childLayout
-			
-			fatherLayout=childLayout; //ora il child deve diventare father e si cicla
-			
-        }
+			fatherLayout.addView(childLayout, linLayoutParam);
+			tv = new TextView(this);
+			tv.setText("Not Best Practices Layout Hierarchy");
+			childLayout.addView(tv, lpView);
+			fatherLayout = childLayout;
+
+		}
+		
 		rootLayout.setBackgroundColor(0xFFFF4C4C);
 		setContentView(rootLayout, linLayoutParam);
-		//setContentView(R.layout.activity_nbplayout_hierarchy);
-		
 		ViewServer.get(this).addWindow(this);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		ViewServer.get(this).removeWindow(this);
 	}
-	
+
 	@Override
-    public void onResume() {
+	public void onResume() {
 		super.onResume();
 		ViewServer.get(this).setFocusedWindow(this);
 	}

@@ -13,8 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
-
-
 public class AllPracticesActivity extends Activity {
 
 	@Override
@@ -22,49 +20,48 @@ public class AllPracticesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_all_practices);
 		GridView gridview = (GridView) this.findViewById(R.id.griglia);
-		String[] dati = new String[]{ 
-				"Layout Hierarchy Best Practices","Layout Hierarchy not Best Practices"
-		};
+		String[] dati = new String[] { "Layout Hierarchy Best Practices",
+				"Layout Hierarchy not Best Practices" };
 		final int[] colors = new int[] { 0xFF66FF66, 0xFFFF4C4C };
-		ListAdapter adapter = new ArrayAdapter<String>(this, R.layout.grid_cell, dati) {
-			
-			  @Override
-			  public View getView(int position, View convertView, ViewGroup parent) {
-			    View view = super.getView(position, convertView, parent);
-			    int colorPos = position % colors.length;
-			    view.setBackgroundColor(colors[colorPos]);
-			    return view;
-			    
-			  }
-			};
-		
+		ListAdapter adapter = new ArrayAdapter<String>(this,
+				R.layout.grid_cell, dati) {
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				View view = super.getView(position, convertView, parent);
+				int colorPos = position % colors.length;
+				view.setBackgroundColor(colors[colorPos]);
+				return view;
+
+			}
+		};
+
 		gridview.setAdapter(adapter);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	        	if(position == 0){
-	        		Intent intent = new Intent(AllPracticesActivity.this, BPLayoutHierarchyActivity.class);
-	        		startActivity(intent);
-	        	}else if(position == 1){
-	        		Intent intent = new Intent(AllPracticesActivity.this, NBPLayoutHierarchyActivity.class);
-	        		startActivity(intent);
-	        	}
-	        }
-	    });
-		//View v = (View) gridview.getChildAt(0);
-		//v.setBackgroundColor(0x66FF66);
-		//v = (View) gridview.getChildAt(1);
-		//v.setBackgroundColor(Color.parseColor("#FF4C4C"));
-		ViewServer.get(this).addWindow(this); 
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				if (position == 0) {
+					Intent intent = new Intent(AllPracticesActivity.this,
+							BPLayoutHierarchyActivity.class);
+					startActivity(intent);
+				} else if (position == 1) {
+					Intent intent = new Intent(AllPracticesActivity.this,
+							NBPLayoutHierarchyActivity.class);
+					startActivity(intent);
+				}
+			}
+		});
+		ViewServer.get(this).addWindow(this);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		ViewServer.get(this).removeWindow(this);
 	}
-	
+
 	@Override
-    public void onResume() {
+	public void onResume() {
 		super.onResume();
 		ViewServer.get(this).setFocusedWindow(this);
 	}
