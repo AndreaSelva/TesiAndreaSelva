@@ -1,21 +1,22 @@
 package it.uninsubria.tesiandreaselva;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class BPLayoutHierarchyActivity extends Activity {
+public class BPListLayoutHierarchyActivity extends Activity {
 
 	private TextView mMemoryTextView;
 	private TextView mFreeTextView;
@@ -23,49 +24,55 @@ public class BPLayoutHierarchyActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		RelativeLayout rootLayout = new RelativeLayout(this);
-		RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.MATCH_PARENT);
-		rootLayout.setPadding(25, 25, 0, 0);
-
-		RelativeLayout.LayoutParams lpViewTop = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.WRAP_CONTENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		lpViewTop.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		Random rnd = new Random();
-		int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-		TextView tv = new TextView(this);
-		tv.setBackgroundColor(color);
-		tv.setId(1);
-		tv.setText("Best Practices Layout Hierarchy");
-
-		rootLayout.addView(tv, lpViewTop);
-
-		RelativeLayout.LayoutParams lpViewBelow = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.WRAP_CONTENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		lpViewBelow.addRule(RelativeLayout.BELOW, tv.getId());
-
-		for (int i = 2; i < 100; i++) {
-
-			tv = new TextView(this);
-			color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-			tv.setBackgroundColor(color);
-			tv.setId(i);
-			tv.setText("Best Practices Layout Hierarchy");
-			rootLayout.addView(tv, lpViewBelow);
-			lpViewBelow = new RelativeLayout.LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
-					ViewGroup.LayoutParams.WRAP_CONTENT);
-			lpViewBelow.addRule(RelativeLayout.BELOW, tv.getId());
-
-		}
-		rootLayout.setBackgroundColor(0xFF66FF66);
-		setContentView(rootLayout, relLayoutParam);
+		setContentView(R.layout.activity_bplist_layout_hierarchy);
 		
-		ActionBar mActionBar = getActionBar();
+		ArrayList<Person> personList=new ArrayList<Person>(); //lista delle persone che la listview visualizzerà
+	        
+	    Person [] people={
+	                new Person("Luca","Bolli","3463872640"),
+	                new Person("Giovanni", "Plutonio", "3428761119"),
+	                new Person("Sandro","Latti","3609382882"),
+	                new Person("Manuela","Corte","3338476610"),
+	                new Person("Filippa","Sola","3465457887"),
+	                new Person("Andrea","Rapa","3487889246"),
+	                new Person("Francesca","Gentile","399875458")};
+	     
+	    Random r=new Random();
+	    for(int i=0;i<100;i++){
+	                personList.add(people[r.nextInt(people.length)]);
+	    }
+	  
+	    //Questa è la lista che rappresenta la sorgente dei dati della listview
+        //ogni elemento è una mappa(chiave->valore)
+        ArrayList<HashMap<String, Object>> data=new ArrayList<HashMap<String,Object>>();
+
+        for(int i=0;i<personList.size();i++){
+            Person p=personList.get(i);// per ogni persona all'inteno della ditta
+            
+            HashMap<String,Object> personMap=new HashMap<String, Object>();//creiamo una mappa di valori
+            
+            personMap.put("name", p.getName()); // per la chiave name,l'informazine sul nome
+            personMap.put("surname", p.getSurname());// per la chiave surnaname, l'informazione sul cognome
+            personMap.put("phone", p.getTelephone()); // per la chiave phone, inseriamo la risorsa dell numero telefono
+            data.add(personMap);  //aggiungiamo la mappa di valori alla sorgente dati
+        }
+        
+        String[] from={"name","surname","phone"}; //dai valori contenuti in queste chiavi
+        int[] to={R.id.personName,R.id.personSurname,R.id.personPhone};//agli id delle view
+        
+        //costruzione dell adapter
+        SimpleAdapter adapter=new SimpleAdapter(
+                        getApplicationContext(),
+                        data,//sorgente dati
+                        R.layout.list_item_bp, //layout contenente gli id di "to"
+                        from,
+                        to);
+       
+        //utilizzo dell'adapter
+        ListView listView = (ListView)findViewById(R.id.BPlistView);
+        listView.setAdapter(adapter);
+        
+        ActionBar mActionBar = getActionBar();
 		mActionBar.setDisplayShowHomeEnabled(false);
 		mActionBar.setDisplayShowTitleEnabled(false);
 		LayoutInflater mInflater = LayoutInflater.from(this);
@@ -93,7 +100,7 @@ public class BPLayoutHierarchyActivity extends Activity {
 		mActionBar.setCustomView(mCustomView);
 		mActionBar.setDisplayShowCustomEnabled(true);
 		
-		
+        
 		ViewServer.get(this).addWindow(this);
 	}
 
@@ -112,11 +119,11 @@ public class BPLayoutHierarchyActivity extends Activity {
 		mFreeTextView.setText("Memory Free: "+Runtime.getRuntime().freeMemory()+" KB");
 		ViewServer.get(this).setFocusedWindow(this);
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.bplayout_hierarchy, menu);
+		getMenuInflater().inflate(R.menu.bplist_layout_hierarchy, menu);
 		return true;
 	}
 

@@ -7,5 +7,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_bplayout_hierarchy">BPLayoutHierarchy</string>
     <string name="title_activity_nbplayout_hierarchy">NBPLayoutHierarchy</string>
+    <string name="title_activity_bplist_layout_hierarchy">BPListLayoutHierarchyActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_nbplist_layout_hierarchy">NBPListLayoutHierarchyActivity</string>
 
 </resources>
