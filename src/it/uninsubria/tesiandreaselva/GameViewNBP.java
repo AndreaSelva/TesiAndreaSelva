@@ -1,0 +1,91 @@
+package it.uninsubria.tesiandreaselva;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+public class GameViewNBP extends SurfaceView {
+	private SurfaceHolder holder;
+	private GameLoopThreadNBP gameLoopThread;
+	private List<SpriteNBP> sprites = new ArrayList<SpriteNBP>();
+
+	public GameViewNBP(Context context) {
+		super(context);
+		gameLoopThread = new GameLoopThreadNBP(this);
+		holder = getHolder();
+		holder.addCallback(new SurfaceHolder.Callback() {
+
+			@Override
+			public void surfaceDestroyed(SurfaceHolder holder) {
+				boolean retry = true;
+				gameLoopThread.setRunning(false);
+				while (retry) {
+					try {
+						gameLoopThread.join();
+						retry = false;
+					} catch (InterruptedException e) {
+					}
+				}
+			}
+
+			@Override
+			public void surfaceCreated(SurfaceHolder holder) {
+				createSprites();
+				gameLoopThread.setRunning(true);
+				gameLoopThread.start();
+			}
+
+			@Override
+			public void surfaceChanged(SurfaceHolder holder, int format,
+					int width, int height) {
+			}
+		});
+	}
+
+	private void createSprites() {
+		sprites.add(createSprite(R.drawable.loki));
+		sprites.add(createSprite(R.drawable.thor));
+		sprites.add(createSprite(R.drawable.ironman));
+		sprites.add(createSprite(R.drawable.hawkeye));
+		sprites.add(createSprite(R.drawable.blackwidow));
+		sprites.add(createSprite(R.drawable.hulk));
+		sprites.add(createSprite(R.drawable.america));
+
+	}
+	public void setSprites(List<SpriteNBP> sprites){
+		this.sprites = sprites;
+	}
+
+	private SpriteNBP createSprite(int resouce) {
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(), resouce);
+		return new SpriteNBP(this, bmp);
+	}
+
+	@SuppressLint("WrongCall")
+	@Override
+	protected void onDraw(Canvas canvas) {
+		canvas.drawColor(Color.BLACK);
+		synchronized (getHolder()) {
+            for (int i = sprites.size() - 1; i >= 1; i--) {
+                SpriteNBP sprite = sprites.get(i);
+                if (sprite.getBounds().intersect(sprites.get(0).getBounds())) {
+                	  sprites.remove(0);
+                      sprites.add(0, createSprite(R.drawable.loki));;
+                      break;
+                }
+            }
+        }
+		for (SpriteNBP sprite : sprites) {
+			sprite.onDraw(canvas);
+		}
+	}
+	
+}

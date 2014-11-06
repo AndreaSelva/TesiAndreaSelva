@@ -40,6 +40,14 @@
             android:name=".NBPListLayoutHierarchyActivity"
             android:label="@string/title_activity_nbplist_layout_hierarchy" >
         </activity>
+        <activity
+            android:name=".BPMultiThreadActivity"
+            android:label="@string/title_activity_bpmulti_thread" >
+        </activity>
+        <activity
+            android:name=".NBPMultiThreadActivity"
+            android:label="@string/title_activity_nbpmulti_thread" >
+        </activity>
     </application>
 
 </manifest>

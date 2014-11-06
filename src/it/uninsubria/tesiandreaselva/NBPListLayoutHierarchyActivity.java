@@ -29,13 +29,13 @@ public class NBPListLayoutHierarchyActivity extends Activity {
 		ArrayList<Person> personList=new ArrayList<Person>(); //lista delle persone che la listview visualizzerà
 	      	        
 	    Person [] people={
-	                new Person("Luca","Bolli","3463872640"),
-	                new Person("Giovanni", "Plutonio", "3428761119"),
-	                new Person("Sandro","Latti","3609382882"),
-	                new Person("Manuela","Corte","3338476610"),
-	                new Person("Filippa","Sola","3465457887"),
-	                new Person("Andrea","Rapa","3487889246"),
-	                new Person("Francesca","Gentile","399875458")};
+	    		new Person("Luca","Bolli","3463872640", getPhoto()),
+                new Person("Giovanni", "Plutonio", "3428761119", getPhoto()),
+                new Person("Sandro","Latti","3609382882", getPhoto()),
+                new Person("Manuela","Corte","3338476610", getPhoto()),
+                new Person("Filippa","Sola","3465457887", getPhoto()),
+                new Person("Andrea","Rapa","3487889246", getPhoto()),
+                new Person("Francesca","Gentile","399875458", getPhoto())};
 	     
 	    Random r=new Random();
 	    for(int i=0;i<100;i++){
@@ -54,11 +54,12 @@ public class NBPListLayoutHierarchyActivity extends Activity {
             personMap.put("name", p.getName()); // per la chiave name,l'informazine sul nome
             personMap.put("surname", p.getSurname());// per la chiave surnaname, l'informazione sul cognome
             personMap.put("phone", p.getTelephone()); // per la chiave phone, inseriamo la risorsa dell numero telefono
+            personMap.put("image", p.getPhotoRes());// per la chiave immagine inseriamo l'info dell'immagine
             data.add(personMap);  //aggiungiamo la mappa di valori alla sorgente dati
         }
         
-        String[] from={"name","surname","phone"}; //dai valori contenuti in queste chiavi
-        int[] to={R.id.personName,R.id.personSurname,R.id.personPhone};//agli id delle view
+        String[] from={"name","surname","phone","image"}; //dai valori contenuti in queste chiavi
+        int[] to={R.id.personName,R.id.personSurname,R.id.personPhone,R.id.personImage};//agli id delle view
         
         //costruzione dell adapter
         SimpleAdapter adapter=new SimpleAdapter(
@@ -79,7 +80,7 @@ public class NBPListLayoutHierarchyActivity extends Activity {
 
 		View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
 		TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-		mTitleTextView.setText("All Practices");
+		mTitleTextView.setText("NBP List Layout Hierarchy");
 		mMemoryTextView = (TextView) mCustomView.findViewById(R.id.memory_text);
 		
 		mMemoryTextView.setText("Memory Usage: "+(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())+" KB");
@@ -137,5 +138,19 @@ public class NBPListLayoutHierarchyActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	private int getPhoto(){
+		Random r=new Random();
+		int i = r.nextInt(1000)%10;
+		if(i==0) return R.drawable.img1;
+		else if(i==1) return R.drawable.img2;
+		else if(i==2) return R.drawable.img3;
+		else if(i==3) return R.drawable.img4;
+		else if(i==4) return R.drawable.img5;
+		else if(i==5) return R.drawable.img6;
+		else if(i==6) return R.drawable.img7;
+		else if(i==7) return R.drawable.img8;
+		else if(i==8) return R.drawable.img9;
+		else return R.drawable.img10;
 	}
 }

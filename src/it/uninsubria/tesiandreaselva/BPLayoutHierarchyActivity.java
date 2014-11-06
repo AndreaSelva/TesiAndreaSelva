@@ -1,7 +1,5 @@
 package it.uninsubria.tesiandreaselva;
 
-import java.util.Random;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Color;
@@ -13,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class BPLayoutHierarchyActivity extends Activity {
@@ -24,6 +23,11 @@ public class BPLayoutHierarchyActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		ScrollView scroll = new ScrollView(this);
+		ScrollView.LayoutParams srlLayoutParam = new ScrollView.LayoutParams(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT);
+		
 		RelativeLayout rootLayout = new RelativeLayout(this);
 		RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
@@ -34,8 +38,7 @@ public class BPLayoutHierarchyActivity extends Activity {
 				ViewGroup.LayoutParams.WRAP_CONTENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT);
 		lpViewTop.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		Random rnd = new Random();
-		int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+		int color = Color.argb(255, getRed(), getGreen(), 0);
 		TextView tv = new TextView(this);
 		tv.setBackgroundColor(color);
 		tv.setId(1);
@@ -48,10 +51,10 @@ public class BPLayoutHierarchyActivity extends Activity {
 				ViewGroup.LayoutParams.WRAP_CONTENT);
 		lpViewBelow.addRule(RelativeLayout.BELOW, tv.getId());
 
-		for (int i = 2; i < 100; i++) {
+		for (int i = 2; i < 43; i++) {
 
 			tv = new TextView(this);
-			color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+			color = Color.argb(255, getRed(), getGreen(), 0);
 			tv.setBackgroundColor(color);
 			tv.setId(i);
 			tv.setText("Best Practices Layout Hierarchy");
@@ -63,7 +66,8 @@ public class BPLayoutHierarchyActivity extends Activity {
 
 		}
 		rootLayout.setBackgroundColor(0xFF66FF66);
-		setContentView(rootLayout, relLayoutParam);
+		scroll.addView(rootLayout, relLayoutParam);
+		setContentView(scroll, srlLayoutParam);
 		
 		ActionBar mActionBar = getActionBar();
 		mActionBar.setDisplayShowHomeEnabled(false);
@@ -72,7 +76,7 @@ public class BPLayoutHierarchyActivity extends Activity {
 
 		View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
 		TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-		mTitleTextView.setText("All Practices");
+		mTitleTextView.setText("BP Layout Hierarchy");
 		mMemoryTextView = (TextView) mCustomView.findViewById(R.id.memory_text);
 		
 		mMemoryTextView.setText("Memory Usage: "+(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())+" KB");
@@ -95,6 +99,31 @@ public class BPLayoutHierarchyActivity extends Activity {
 		
 		
 		ViewServer.get(this).addWindow(this);
+	}
+
+	private int red=0;
+	private int green=255;
+	private int state=1;
+	
+	private int getRed() {
+		if(state==1){
+			red=red+11;
+			if(red>255){
+				red=255;
+				state = 2;
+			}
+			return red;
+		}
+		return red;
+	}
+
+	private int getGreen() {
+		if(state==1) return green;
+		else {
+			green = green-11;
+			if(green<0)green=0;
+			return green;
+		}
 	}
 
 	@Override

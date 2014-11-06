@@ -1,7 +1,5 @@
 package it.uninsubria.tesiandreaselva;
 
-import java.util.Random;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Color;
@@ -24,14 +22,14 @@ public class NBPLayoutHierarchyActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		
 		LinearLayout rootLayout = new LinearLayout(this);
 		rootLayout.setOrientation(LinearLayout.VERTICAL);
 		LayoutParams linLayoutParam = new LayoutParams(
 				LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT);
 		rootLayout.setPadding(25, 25, 0, 0);
-		Random rnd = new Random();
-		int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+		int color = Color.argb(255, getRed(), getGreen(), 0);
 		rootLayout.setBackgroundColor(color);
 
 		LayoutParams lpView = new LayoutParams(
@@ -45,9 +43,10 @@ public class NBPLayoutHierarchyActivity extends Activity {
 
 		for (int i = 0; i < 25; i++) {
 
+			fatherLayout.setPadding(10, 0, 0, 0);
 			LinearLayout childLayout = new LinearLayout(this);
 			childLayout.setOrientation(LinearLayout.VERTICAL); 
-			color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+			color = Color.argb(255, getRed(), getGreen(), 0);
 			childLayout.setBackgroundColor(color);
 			fatherLayout.addView(childLayout, linLayoutParam);
 			tv = new TextView(this);
@@ -64,7 +63,7 @@ public class NBPLayoutHierarchyActivity extends Activity {
 
 		View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
 		TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-		mTitleTextView.setText("All Practices");
+		mTitleTextView.setText("NB Layout Hierarchy");
 		mMemoryTextView = (TextView) mCustomView.findViewById(R.id.memory_text);
 		
 		mMemoryTextView.setText("Memory Usage: "+(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())+" KB");
@@ -90,6 +89,31 @@ public class NBPLayoutHierarchyActivity extends Activity {
 		ViewServer.get(this).addWindow(this);
 	}
 
+	private int red=0;
+	private int green=255;
+	private int state=1;
+	
+	private int getRed() {
+		if(state==1){
+			red=red+22;
+			if(red>255){
+				red=255;
+				state = 2;
+			}
+			return red;
+		}
+		return red;
+	}
+
+	private int getGreen() {
+		if(state==1) return green;
+		else {
+			green = green-22;
+			if(green<0)green=0;
+			return green;
+		}
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

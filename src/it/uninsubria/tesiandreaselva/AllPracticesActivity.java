@@ -30,7 +30,7 @@ public class AllPracticesActivity extends Activity {
 		GridView gridview = (GridView) this.findViewById(R.id.griglia);
 		String[] dati = new String[] { "Layout Hierarchy Best Practices",
 				"Layout Hierarchy not Best Practices", "List Layout Hierarchy Best Practices",
-				"List Layout Hierarchy Not Best Practices" };
+				"List Layout Hierarchy Not Best Practices", "Multi Thread Best Practices", "Multi Thread Not Best Practices" };
 		final int[] colors = new int[] { 0xFF66FF66, 0xFFFF4C4C };
 		ListAdapter adapter = new ArrayAdapter<String>(this,
 				R.layout.grid_cell, dati) {
@@ -65,7 +65,16 @@ public class AllPracticesActivity extends Activity {
 					Intent intent = new Intent(AllPracticesActivity.this,
 							NBPListLayoutHierarchyActivity.class);
 					startActivity(intent);
+				} else if (position == 4) {
+					Intent intent = new Intent(AllPracticesActivity.this,
+							BPMultiThreadActivity.class);
+					startActivity(intent);
+				} else if (position == 5) {
+					Intent intent = new Intent(AllPracticesActivity.this,
+							NBPMultiThreadActivity.class);
+					startActivity(intent);
 				}
+				
 			}
 		});
 		
