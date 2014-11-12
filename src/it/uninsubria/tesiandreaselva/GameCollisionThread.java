@@ -9,11 +9,11 @@ import android.graphics.Canvas;
 public class GameCollisionThread extends Thread {
 
 	private GameViewBP view;
-	private List<SpriteBP> sprites = new ArrayList<SpriteBP>();
+	private List<Sprite> sprites = new ArrayList<Sprite>();
 	private boolean running = false;
 	static final long FPS = 10;
 
-	public GameCollisionThread(GameViewBP view, List<SpriteBP> sprites) {
+	public GameCollisionThread(GameViewBP view, List<Sprite> sprites) {
 		this.view = view;
 		this.sprites = sprites;
 	}
@@ -32,23 +32,19 @@ public class GameCollisionThread extends Thread {
 				startTime = System.currentTimeMillis();
 				synchronized (view.getHolder()) {
 					for (int i = sprites.size() - 1; i >= 1; i--) {
-						SpriteBP sprite = sprites.get(i);
+						Sprite sprite = sprites.get(i);
 						if (sprite.getBounds().intersect(
 								sprites.get(0).getBounds())) {
+							sprites.get(0).stop();
 							sprites.remove(0);
-							sprites.add(
-									0,
-									new SpriteBP(view, BitmapFactory
-											.decodeResource(
-													view.getResources(),
-													R.drawable.loki)));
+							sprites.add(0, view.createSprite(R.drawable.loki));
 							view.setSprites(sprites);
 							break;
 						}
 					}
 				}
-			} catch (Exception e) {}
-			
+			} catch (Exception e) {
+			}
 			sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
 			try {
 				if (sleepTime > 0)
@@ -60,7 +56,7 @@ public class GameCollisionThread extends Thread {
 		}
 	}
 
-	public void setSprites(List<SpriteBP> sprites) {
+	public void setSprites(List<Sprite> sprites) {
 		this.sprites = sprites;
 	}
 }

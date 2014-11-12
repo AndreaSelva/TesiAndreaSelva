@@ -2,6 +2,8 @@ package it.uninsubria.tesiandreaselva;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,13 +15,13 @@ import android.view.SurfaceView;
 
 public class GameViewBP extends SurfaceView {
 	private SurfaceHolder holder;
-	private GameLoopThreadBP gameLoopThread;
+	private GameLoopThread gameLoopThread;
 	private GameCollisionThread gameCollisionThread;
-	private List<SpriteBP> sprites = new ArrayList<SpriteBP>();
+	private List<Sprite> sprites = new ArrayList<Sprite>();
 
 	public GameViewBP(Context context) {
 		super(context);
-		gameLoopThread = new GameLoopThreadBP(this);
+		gameLoopThread = new GameLoopThread(this);
 		gameCollisionThread = new GameCollisionThread(this, sprites);
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
@@ -28,9 +30,12 @@ public class GameViewBP extends SurfaceView {
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				boolean retry = true;
 				gameLoopThread.setRunning(false);
-				gameCollisionThread.setRunning(false);
+				gameCollisionThread.setRunning(false);			
 				while (retry) {
 					try {
+						for (Sprite sprite : sprites) {
+							sprite.stop();
+						}
 						gameLoopThread.join();
 						gameCollisionThread.join();
 						retry = false;
@@ -66,22 +71,26 @@ public class GameViewBP extends SurfaceView {
 		sprites.add(createSprite(R.drawable.america));
 
 	}
-	public void setSprites(List<SpriteBP> sprites){
+	public void setSprites(List<Sprite> sprites){
 		this.sprites = sprites;
 	}
 
-	private SpriteBP createSprite(int resouce) {
+	public Sprite createSprite(int resouce) {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(), resouce);
-		return new SpriteBP(this, bmp);
+		Sprite sprite = new Sprite(this, bmp);
+		return sprite;
 	}
 
 	@SuppressLint("WrongCall")
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
+		
 		synchronized (getHolder()) {
-			for (SpriteBP sprite : sprites) {
+	
+			for (Sprite sprite : sprites) {
 				sprite.onDraw(canvas);
+
 			}
 		}
 	}

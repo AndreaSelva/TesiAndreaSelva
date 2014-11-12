@@ -14,12 +14,12 @@ import android.view.SurfaceView;
 
 public class GameViewNBP extends SurfaceView {
 	private SurfaceHolder holder;
-	private GameLoopThreadNBP gameLoopThread;
-	private List<SpriteNBP> sprites = new ArrayList<SpriteNBP>();
+	private GameLoopThread gameLoopThread;
+	private List<Sprite> sprites = new ArrayList<Sprite>();
 
 	public GameViewNBP(Context context) {
 		super(context);
-		gameLoopThread = new GameLoopThreadNBP(this);
+		gameLoopThread = new GameLoopThread(this);
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
 
@@ -60,13 +60,14 @@ public class GameViewNBP extends SurfaceView {
 		sprites.add(createSprite(R.drawable.america));
 
 	}
-	public void setSprites(List<SpriteNBP> sprites){
+
+	public void setSprites(List<Sprite> sprites) {
 		this.sprites = sprites;
 	}
 
-	private SpriteNBP createSprite(int resouce) {
+	private Sprite createSprite(int resouce) {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(), resouce);
-		return new SpriteNBP(this, bmp);
+		return new Sprite(this, bmp);
 	}
 
 	@SuppressLint("WrongCall")
@@ -74,18 +75,21 @@ public class GameViewNBP extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		synchronized (getHolder()) {
-            for (int i = sprites.size() - 1; i >= 1; i--) {
-                SpriteNBP sprite = sprites.get(i);
-                if (sprite.getBounds().intersect(sprites.get(0).getBounds())) {
-                	  sprites.remove(0);
-                      sprites.add(0, createSprite(R.drawable.loki));;
-                      break;
-                }
-            }
-        }
-		for (SpriteNBP sprite : sprites) {
-			sprite.onDraw(canvas);
+			for (int i = sprites.size() - 1; i >= 1; i--) {
+				Sprite sprite = sprites.get(i);
+				if (sprite.getBounds().intersect(sprites.get(0).getBounds())) {
+					sprites.remove(0);
+					sprites.add(0, createSprite(R.drawable.loki));
+					;
+					break;
+				}
+			}
+
+			for (Sprite sprite : sprites) {
+				sprite.onDraw(canvas);
+
+			}
 		}
 	}
-	
+
 }
