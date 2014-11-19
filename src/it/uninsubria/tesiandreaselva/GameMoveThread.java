@@ -34,6 +34,18 @@ public class GameMoveThread extends Thread {
 	public Sprite getSprite(){
 		return sprite;
 	}
+	public void setSprite(Sprite sprite){
+		this.sprite = sprite;
+		GameViewWidth = sprite.getGameViewWidth();
+		GameViewHeight = sprite.getGameViewHeight();
+		x = sprite.getX();
+		y = sprite.getY();
+		xSpeed = sprite.getxSpeed();
+		ySpeed = sprite.getySpeed();
+		currentFrame = sprite.getCurrentFrame();
+		width = sprite.getWidth();
+		height = sprite.getHeight();
+	}
 	public void setRunning(boolean run) {
 		running = run;
 	}
@@ -47,6 +59,10 @@ public class GameMoveThread extends Thread {
 			try {
 				startTime = System.currentTimeMillis();
 				synchronized (view.getHolder()) {
+					int a=0;
+					for(int i=0; i<3000000; i++){
+						a=a+i;
+					}
 					if (x >= GameViewWidth - width - xSpeed || x + xSpeed <= 0) {
 						xSpeed = -xSpeed;
 						sprite.setxSpeed(xSpeed);
@@ -63,7 +79,6 @@ public class GameMoveThread extends Thread {
 					sprite.setY(y);
 					currentFrame = ++currentFrame % BMP_COLUMNS;
 					sprite.setCurrentFrame(currentFrame);
-
 				}
 			} catch (Exception e) {
 			}

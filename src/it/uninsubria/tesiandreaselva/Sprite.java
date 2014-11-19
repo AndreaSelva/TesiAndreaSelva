@@ -47,6 +47,23 @@ public class Sprite {
 		gameMoveThread.setRunning(true);
 		gameMoveThread.start();
 	}
+	public Sprite(GameViewBP gameView, Bitmap bmp, GameMoveThread thread) {
+		this.width = bmp.getWidth() / BMP_COLUMNS;
+		this.height = bmp.getHeight() / BMP_ROWS;
+		this.gameViewBP = gameView;
+		this.bmp = bmp;
+		GameViewWidth = gameViewBP.getWidth();
+		GameViewHeight = gameViewBP.getHeight();
+
+		Random rnd = new Random();
+		x = rnd.nextInt(gameView.getWidth() - width);
+		y = rnd.nextInt(gameView.getHeight() - height);
+		xSpeed = rnd.nextInt(MAX_SPEED * 3) - MAX_SPEED;
+		ySpeed = rnd.nextInt(MAX_SPEED * 3) - MAX_SPEED;
+
+		thread.setSprite(this);
+		gameMoveThread = thread;
+	}
 
 	public Sprite(GameViewNBP gameView, Bitmap bmp) {
 		this.width = bmp.getWidth() / BMP_COLUMNS;
@@ -75,8 +92,15 @@ public class Sprite {
 			retry = false;
 		}
 	}
+	public GameMoveThread getThread(){
+		return gameMoveThread;
+	}
 
 	private void updateNBP() {
+		int a=0;
+		for(int i=0; i<3000000; i++){
+			a=a+i;
+		}
 		if (x >= GameViewWidth - width - xSpeed || x + xSpeed <= 0) {
 			xSpeed = -xSpeed;
 		}

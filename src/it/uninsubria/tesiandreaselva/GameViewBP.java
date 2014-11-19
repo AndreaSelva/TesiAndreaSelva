@@ -30,7 +30,7 @@ public class GameViewBP extends SurfaceView {
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				boolean retry = true;
 				gameLoopThread.setRunning(false);
-				gameCollisionThread.setRunning(false);			
+				gameCollisionThread.setRunning(false);
 				while (retry) {
 					try {
 						for (Sprite sprite : sprites) {
@@ -71,7 +71,8 @@ public class GameViewBP extends SurfaceView {
 		sprites.add(createSprite(R.drawable.america));
 
 	}
-	public void setSprites(List<Sprite> sprites){
+
+	public void setSprites(List<Sprite> sprites) {
 		this.sprites = sprites;
 	}
 
@@ -81,18 +82,22 @@ public class GameViewBP extends SurfaceView {
 		return sprite;
 	}
 
+	public Sprite createSprite(int resouce, GameMoveThread thread) {
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(), resouce);
+		Sprite sprite = new Sprite(this, bmp, thread);
+		return sprite;
+	}
+
 	@SuppressLint("WrongCall")
 	@Override
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.BLACK);
-		
 		synchronized (getHolder()) {
-	
+			canvas.drawColor(Color.BLACK);
 			for (Sprite sprite : sprites) {
 				sprite.onDraw(canvas);
 
 			}
 		}
 	}
-	
+
 }

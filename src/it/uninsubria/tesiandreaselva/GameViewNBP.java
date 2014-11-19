@@ -73,8 +73,8 @@ public class GameViewNBP extends SurfaceView {
 	@SuppressLint("WrongCall")
 	@Override
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.BLACK);
 		synchronized (getHolder()) {
+			canvas.drawColor(Color.BLACK);
 			for (int i = sprites.size() - 1; i >= 1; i--) {
 				Sprite sprite = sprites.get(i);
 				if (sprite.getBounds().intersect(sprites.get(0).getBounds())) {

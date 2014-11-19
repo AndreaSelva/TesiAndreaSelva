@@ -35,9 +35,10 @@ public class GameCollisionThread extends Thread {
 						Sprite sprite = sprites.get(i);
 						if (sprite.getBounds().intersect(
 								sprites.get(0).getBounds())) {
-							sprites.get(0).stop();
+							GameMoveThread thread = sprites.get(0).getThread();
 							sprites.remove(0);
-							sprites.add(0, view.createSprite(R.drawable.loki));
+							Sprite oki = view.createSprite(R.drawable.loki, thread);
+							sprites.add(0, oki);
 							view.setSprites(sprites);
 							break;
 						}
