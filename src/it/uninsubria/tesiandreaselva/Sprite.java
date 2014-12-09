@@ -98,7 +98,7 @@ public class Sprite {
 
 	private void updateNBP() {
 		int a=0;
-		for(int i=0; i<3000000; i++){
+		for(int i=0; i<1500000; i++){
 			a=a+i;
 		}
 		if (x >= GameViewWidth - width - xSpeed || x + xSpeed <= 0) {

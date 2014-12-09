@@ -9,8 +9,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 public class GameViewNBP extends SurfaceView {
 	private SurfaceHolder holder;
@@ -48,10 +50,34 @@ public class GameViewNBP extends SurfaceView {
 					int width, int height) {
 			}
 		});
+		final Toast toast = Toast.makeText(context, "10", Toast.LENGTH_LONG);
+		toast.show();
+		android.os.Debug.startMethodTracing("NBP");
+		new CountDownTimer(10000, 1000) {
+
+			public void onTick(long millisUntilFinished) {
+			    long sec = millisUntilFinished / 1000 + 1;
+			    if(millisUntilFinished < 1000) sec = 1;
+				//toast.cancel();
+				toast.setText("" + sec);
+				toast.show();
+			}
+
+			public void onFinish() {
+				toast.cancel();
+				android.os.Debug.stopMethodTracing();
+			}
+		}.start();
 	}
 
 	private void createSprites() {
 		sprites.add(createSprite(R.drawable.loki));
+		sprites.add(createSprite(R.drawable.thor));
+		sprites.add(createSprite(R.drawable.ironman));
+		sprites.add(createSprite(R.drawable.hawkeye));
+		sprites.add(createSprite(R.drawable.blackwidow));
+		sprites.add(createSprite(R.drawable.hulk));
+		sprites.add(createSprite(R.drawable.america));
 		sprites.add(createSprite(R.drawable.thor));
 		sprites.add(createSprite(R.drawable.ironman));
 		sprites.add(createSprite(R.drawable.hawkeye));

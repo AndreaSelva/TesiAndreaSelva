@@ -1,100 +1,60 @@
 package it.uninsubria.tesiandreaselva;
 
+import java.util.List;
+import java.util.Map;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class AllPracticesActivity extends Activity {
+public class NBPDownloadActivity extends Activity {
 
 	private TextView mMemoryTextView;
 	private TextView mFreeTextView;
+	private TextView timer;
+	private TextView status;
+	private int count = 0;
+	private List<Map<String, String>> DB;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_all_practices);
-		GridView gridview = (GridView) this.findViewById(R.id.griglia);
-		String[] dati = new String[] { "Layout Hierarchy Best Practices",
-				"Layout Hierarchy not Best Practices",
-				"List Layout Hierarchy Best Practices",
-				"List Layout Hierarchy Not Best Practices",
-				"Multi Thread Best Practices",
-				"Multi Thread Not Best Practices", "Download Best Practices",
-				"Download Not Best Practices" };
-		final int[] colors = new int[] { 0xFF66FF66, 0xFFFF4C4C };
-		ListAdapter adapter = new ArrayAdapter<String>(this,
-				R.layout.grid_cell, dati) {
+		setContentView(R.layout.activity_nbpdownload);
+
+		timer = (TextView) findViewById(R.id.NBPcounter);
+		status = (TextView) findViewById(R.id.NBPstatus);
+
+		Thread t = new Thread() {
 
 			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {
-				View view = super.getView(position, convertView, parent);
-				int colorPos = position % colors.length;
-				view.setBackgroundColor(colors[colorPos]);
-				return view;
-
+			public void run() {
+				try {
+					while (!isInterrupted()) {
+						Thread.sleep(1000);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								updateCounter(timer);
+							}
+						});
+					}
+				} catch (InterruptedException e) {
+				}
 			}
 		};
-
-		gridview.setAdapter(adapter);
-		gridview.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				if (position == 0) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							BPLayoutHierarchyActivity.class);
-					startActivity(intent);
-				} else if (position == 1) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							NBPLayoutHierarchyActivity.class);
-					startActivity(intent);
-				} else if (position == 2) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							BPListLayoutHierarchyActivity.class);
-					startActivity(intent);
-				} else if (position == 3) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							NBPListLayoutHierarchyActivity.class);
-					startActivity(intent);
-				} else if (position == 4) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							BPMultiThreadActivity.class);
-					startActivity(intent);
-				} else if (position == 5) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							NBPMultiThreadActivity.class);
-					startActivity(intent);
-				} else if (position == 6) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							BPDownloadActivity.class);
-					startActivity(intent);
-				} else if (position == 7) {
-					Intent intent = new Intent(AllPracticesActivity.this,
-							NBPDownloadActivity.class);
-					startActivity(intent);
-				}
-
-			}
-		});
+		t.start();
 
 		ActionBar mActionBar = getActionBar();
 		mActionBar.setDisplayShowHomeEnabled(false);
 		mActionBar.setDisplayShowTitleEnabled(false);
-		LayoutInflater mInflater = LayoutInflater.from(this);
 
+		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
 		TextView mTitleTextView = (TextView) mCustomView
 				.findViewById(R.id.title_text);
@@ -127,6 +87,23 @@ public class AllPracticesActivity extends Activity {
 		mActionBar.setDisplayShowCustomEnabled(true);
 
 		ViewServer.get(this).addWindow(this);
+
+	}
+
+	private void updateCounter(TextView timer) {
+		if (count == 5)
+			download();
+		timer.setText("" + count);
+		count++;
+		if (count == 5)
+			status.setText("Avvio Download");
+	}
+
+	private void download() {
+		DB = MyNote.getData();
+		DB = MyNote.getData();
+		DB = MyNote.getData();
+		status.setText("Fine Download");
 	}
 
 	@Override
@@ -154,7 +131,7 @@ public class AllPracticesActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.all_practices, menu);
+		getMenuInflater().inflate(R.menu.nbpdownload, menu);
 		return true;
 	}
 

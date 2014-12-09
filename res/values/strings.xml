@@ -12,5 +12,7 @@
     <string name="title_activity_nbplist_layout_hierarchy">NBPListLayoutHierarchyActivity</string>
     <string name="title_activity_bpmulti_thread">BPMultiThread</string>
     <string name="title_activity_nbpmulti_thread">NBPMultiThreadActivity</string>
+    <string name="title_activity_bpdownload">BPDownloadActivity</string>
+    <string name="title_activity_nbpdownload">NBPDownloadActivity</string>
 
 </resources>
