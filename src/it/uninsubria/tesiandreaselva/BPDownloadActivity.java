@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class BPDownloadActivity extends Activity {
@@ -22,6 +23,7 @@ public class BPDownloadActivity extends Activity {
 	private TextView status;
 	private int count = 0;
 	private List<Map<String, String>> DB;
+	private ProgressBar bar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,8 @@ public class BPDownloadActivity extends Activity {
 
 		timer = (TextView) findViewById(R.id.BPcounter);
 		status = (TextView) findViewById(R.id.BPstatus);
-
+		bar = (ProgressBar) this.findViewById(R.id.BPprogressBar);
+	    
 		Thread t = new Thread() {
 
 			@Override
@@ -50,6 +53,8 @@ public class BPDownloadActivity extends Activity {
 			}
 		};
 		t.start();
+		android.os.Debug.startMethodTracing("BPDownload");
+		
 		ActionBar mActionBar = getActionBar();
 		mActionBar.setDisplayShowHomeEnabled(false);
 		mActionBar.setDisplayShowTitleEnabled(false);
@@ -94,6 +99,7 @@ public class BPDownloadActivity extends Activity {
 			new download().execute();
 		timer.setText("" + count);
 		count++;
+		if (count == 10) android.os.Debug.stopMethodTracing();
 	}
 
 	class download extends AsyncTask<String, String, String> {
@@ -101,6 +107,7 @@ public class BPDownloadActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			status.setText("Avvio Download");
+			bar.setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -114,6 +121,7 @@ public class BPDownloadActivity extends Activity {
 		@Override
 		protected void onPostExecute(String file_url) {
 			status.setText("Fine Download");
+			bar.setVisibility(View.GONE);
 		}
 
 	}

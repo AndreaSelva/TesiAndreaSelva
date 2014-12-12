@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/NBPcounter"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text=""
@@ -21,12 +21,25 @@
 
     <TextView
         android:id="@+id/NBPstatus"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/NBPcounter"
         android:text=""
         android:textColor="#242424"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold" 
+        android:gravity="center"/>
+    
+    <ProgressBar
+        android:id="@+id/NBPprogressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:indeterminateDrawable="@drawable/progress"
+        android:visibility="gone" >
+    </ProgressBar>
 
 </RelativeLayout>

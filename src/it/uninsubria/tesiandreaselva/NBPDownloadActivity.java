@@ -2,8 +2,10 @@ package it.uninsubria.tesiandreaselva;
 
 import java.util.List;
 import java.util.Map;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class NBPDownloadActivity extends Activity {
@@ -21,6 +24,8 @@ public class NBPDownloadActivity extends Activity {
 	private TextView status;
 	private int count = 0;
 	private List<Map<String, String>> DB;
+	private ProgressBar bar;
+	private boolean state=true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,7 @@ public class NBPDownloadActivity extends Activity {
 
 		timer = (TextView) findViewById(R.id.NBPcounter);
 		status = (TextView) findViewById(R.id.NBPstatus);
+		bar = (ProgressBar) findViewById(R.id.NBPprogressBar);
 
 		Thread t = new Thread() {
 
@@ -49,6 +55,7 @@ public class NBPDownloadActivity extends Activity {
 			}
 		};
 		t.start();
+		android.os.Debug.startMethodTracing("NBPDownload");
 
 		ActionBar mActionBar = getActionBar();
 		mActionBar.setDisplayShowHomeEnabled(false);
@@ -95,8 +102,30 @@ public class NBPDownloadActivity extends Activity {
 			download();
 		timer.setText("" + count);
 		count++;
-		if (count == 5)
+		if (count == 5) {
 			status.setText("Avvio Download");
+			new ProgressTask().execute();
+		}
+		if (count == 10)
+			android.os.Debug.stopMethodTracing();
+	}
+	
+	private class ProgressTask extends AsyncTask <Void,Void,Void>{
+	    @Override
+	    protected void onPreExecute(){
+	        bar.setVisibility(View.VISIBLE);
+	    }
+
+	    @Override
+	    protected Void doInBackground(Void... arg0) {   
+			while(state){}
+	    	return null;
+	    }
+
+	    @Override
+	    protected void onPostExecute(Void result) {
+	          bar.setVisibility(View.GONE);
+	    }
 	}
 
 	private void download() {
@@ -104,6 +133,7 @@ public class NBPDownloadActivity extends Activity {
 		DB = MyNote.getData();
 		DB = MyNote.getData();
 		status.setText("Fine Download");
+		state=false;
 	}
 
 	@Override
