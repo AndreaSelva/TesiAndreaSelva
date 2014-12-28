@@ -22,6 +22,7 @@ public class BPDownloadActivity extends Activity {
 	private TextView timer;
 	private TextView status;
 	private int count = 0;
+	private int realCount = 5;
 	private List<Map<String, String>> DB;
 	private ProgressBar bar;
 
@@ -33,7 +34,7 @@ public class BPDownloadActivity extends Activity {
 		timer = (TextView) findViewById(R.id.BPcounter);
 		status = (TextView) findViewById(R.id.BPstatus);
 		bar = (ProgressBar) this.findViewById(R.id.BPprogressBar);
-	    
+
 		Thread t = new Thread() {
 
 			@Override
@@ -54,7 +55,7 @@ public class BPDownloadActivity extends Activity {
 		};
 		t.start();
 		android.os.Debug.startMethodTracing("BPDownload");
-		
+
 		ActionBar mActionBar = getActionBar();
 		mActionBar.setDisplayShowHomeEnabled(false);
 		mActionBar.setDisplayShowTitleEnabled(false);
@@ -90,28 +91,33 @@ public class BPDownloadActivity extends Activity {
 
 		mActionBar.setCustomView(mCustomView);
 		mActionBar.setDisplayShowCustomEnabled(true);
-
+		status.setText("Preparazione download");
 		ViewServer.get(this).addWindow(this);
 	}
 
 	private void updateCounter(TextView timer) {
 		if (count == 5)
 			new download().execute();
-		timer.setText("" + count);
+		if (realCount > 0) {
+			timer.setText("" + realCount);
+			realCount--;
+		}
 		count++;
-		if (count == 10) android.os.Debug.stopMethodTracing();
+		if (count == 10)
+			android.os.Debug.stopMethodTracing();
 	}
 
 	class download extends AsyncTask<String, String, String> {
 
 		@Override
 		protected void onPreExecute() {
-			status.setText("Avvio Download");
 			bar.setVisibility(View.VISIBLE);
+			timer.setVisibility(View.GONE);
 		}
 
 		@Override
 		protected String doInBackground(String... params) {
+			status.setText("Download in corso...");
 			DB = MyNote.getData();
 			DB = MyNote.getData();
 			DB = MyNote.getData();
@@ -120,7 +126,7 @@ public class BPDownloadActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String file_url) {
-			status.setText("Fine Download");
+			status.setText("Download completato");
 			bar.setVisibility(View.GONE);
 		}
 

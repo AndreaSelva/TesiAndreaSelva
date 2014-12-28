@@ -23,9 +23,10 @@ public class NBPDownloadActivity extends Activity {
 	private TextView timer;
 	private TextView status;
 	private int count = 0;
+	private int realCount = 5;
 	private List<Map<String, String>> DB;
 	private ProgressBar bar;
-	private boolean state=true;
+	private boolean state = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class NBPDownloadActivity extends Activity {
 
 		mActionBar.setCustomView(mCustomView);
 		mActionBar.setDisplayShowCustomEnabled(true);
-
+		status.setText("Preparazione download");
 		ViewServer.get(this).addWindow(this);
 
 	}
@@ -100,40 +101,45 @@ public class NBPDownloadActivity extends Activity {
 	private void updateCounter(TextView timer) {
 		if (count == 5)
 			download();
-		timer.setText("" + count);
+		if (realCount > 0) {
+			timer.setText("" + realCount);
+			realCount--;
+		}
 		count++;
 		if (count == 5) {
-			status.setText("Avvio Download");
+			status.setText("Download in corso...");
 			new ProgressTask().execute();
 		}
 		if (count == 10)
 			android.os.Debug.stopMethodTracing();
 	}
-	
-	private class ProgressTask extends AsyncTask <Void,Void,Void>{
-	    @Override
-	    protected void onPreExecute(){
-	        bar.setVisibility(View.VISIBLE);
-	    }
 
-	    @Override
-	    protected Void doInBackground(Void... arg0) {   
-			while(state){}
-	    	return null;
-	    }
+	private class ProgressTask extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected void onPreExecute() {
+			bar.setVisibility(View.VISIBLE);
+			timer.setVisibility(View.GONE);
+		}
 
-	    @Override
-	    protected void onPostExecute(Void result) {
-	          bar.setVisibility(View.GONE);
-	    }
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			while (state) {
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			bar.setVisibility(View.GONE);
+		}
 	}
 
 	private void download() {
 		DB = MyNote.getData();
 		DB = MyNote.getData();
 		DB = MyNote.getData();
-		status.setText("Fine Download");
-		state=false;
+		status.setText("Download completato");
+		state = false;
 	}
 
 	@Override
